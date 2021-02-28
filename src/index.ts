@@ -9,4 +9,4 @@ const client = new CommandoClient({
 
 client.on('ready', () => console.log('hi'));
 
-client.login(process.env.CLIENT_TOKEN);
+client.login(process.env.CLIENT_TOKENa);
