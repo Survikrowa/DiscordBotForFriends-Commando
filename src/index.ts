@@ -9,4 +9,10 @@ const client = new CommandoClient({
 
 client.on('ready', () => console.log('hi'));
 
-client.login(process.env.CLIENT_TOKENa);
+client.login(process.env.CLIENT_TOKEN);
+
+client.on('message', (message) => {
+  if (message.content === 'ping') {
+    message.channel.send('pong');
+  }
+});
