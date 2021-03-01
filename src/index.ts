@@ -8,6 +8,7 @@ const client = new CommandoClient({
   commandPrefix: process.env.COMMAND_PREFIX,
 });
 
+
 client.registry
   .registerDefaultTypes()
   .registerGroups([['utility', 'utility commands']])
@@ -23,3 +24,4 @@ client.on('message', (message) => {
     message.channel.send('pong');
   }
 });
+

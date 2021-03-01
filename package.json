@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "ts-node-dev src/index.ts",
     "lint": "eslint src/**/*.ts",
-    "format": "eslint src/**/*.ts --fix"
+    "format": "eslint src/**/*.ts --fix",
+    "build": "tsc",
+    "start": "node dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -23,7 +25,6 @@
     "@types/node": "^14.14.31",
     "@typescript-eslint/eslint-plugin": "^4.15.2",
     "@typescript-eslint/parser": "^4.15.2",
-    "dotenv": "^8.2.0",
     "eslint": "^7.20.0",
     "husky": "^5.1.1",
     "prettier": "^2.2.1",
@@ -32,6 +33,7 @@
   },
   "dependencies": {
     "discord.js": "^12.5.1",
-    "discord.js-commando": "^0.12.2"
+    "discord.js-commando": "^0.12.2",
+    "dotenv": "^8.2.0"
   }
 }
