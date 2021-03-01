@@ -13,7 +13,7 @@ client.registry
   .registerGroups([['first', 'testing group']])
   .registerDefaultGroups()
   .registerDefaultCommands()
-  .registerCommandsIn(path.join(__dirname, 'commands'));
+  .registerCommandsIn({ filter: /^.*\.(js|ts)$/, dirname: path.join(__dirname, 'commands') });
 
 console.log(path.join(__dirname, 'commands'));
 client.on('ready', () => console.log('ready'));

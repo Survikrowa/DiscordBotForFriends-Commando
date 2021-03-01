@@ -11,7 +11,7 @@ export default class MeowCommand extends Command {
     });
   }
 
-  run(message: CommandoMessage) {
+  async run(message: CommandoMessage) {
     return message.say('Meow!');
   }
 }
