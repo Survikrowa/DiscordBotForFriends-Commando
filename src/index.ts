@@ -10,10 +10,8 @@ const client = new CommandoClient({
 
 client.registry
   .registerDefaultTypes()
-  .registerGroups([['first', 'testing group']])
-  .registerDefaultGroups()
-  .registerDefaultCommands()
-  .registerCommandsIn({ filter: /^.*\.(js|ts)$/, dirname: path.join(__dirname, 'commands') });
+  .registerGroups([['utility', 'utility commands']])
+  .registerCommandsIn({ filter: /^([^.].*)\.(js|ts)$/, dirname: path.join(__dirname, 'commands') });
 
 console.log(path.join(__dirname, 'commands'));
 client.on('ready', () => console.log('ready'));
