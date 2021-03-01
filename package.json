@@ -7,7 +7,7 @@
     "dev": "ts-node-dev src/index.ts",
     "lint": "eslint src/**/*.ts",
     "format": "eslint src/**/*.ts --fix",
-    "start": "ts-node src/index.ts"
+    "start": "ts-node-dev src/index.ts"
   },
   "repository": {
     "type": "git",
