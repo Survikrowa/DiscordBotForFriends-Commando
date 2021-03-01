@@ -1,5 +1,6 @@
-import { CommandoClient } from 'discord.js-commando';
+import { CommandoClient, Command } from 'discord.js-commando';
 import { config } from 'dotenv';
+import * as path from 'path';
 
 config();
 
@@ -7,7 +8,20 @@ const client = new CommandoClient({
   commandPrefix: process.env.COMMAND_PREFIX,
 });
 
-client.on('ready', () => console.log('hi'));
-//client.on('message', () => console.log('Message recived'))
 
-client.login(process.env['CLIENT_TOKEN']);
+client.registry
+  .registerDefaultTypes()
+  .registerGroups([['utility', 'utility commands']])
+  .registerCommandsIn({ filter: /^([^.].*)\.(js|ts)$/, dirname: path.join(__dirname, 'commands') });
+
+console.log(path.join(__dirname, 'commands'));
+client.on('ready', () => console.log('ready'));
+
+client.login(process.env.CLIENT_TOKEN);
+
+client.on('message', (message) => {
+  if (message.content === 'ping') {
+    message.channel.send('pong');
+  }
+});
+
