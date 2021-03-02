@@ -11,19 +11,17 @@ export default class DefaultHelp extends Command {
     });
   }
 
-  async run(msg: CommandoMessage, args: string) {
+  run(msg: CommandoMessage): Promise<CommandoMessage> {
     const groupList: Collection<string, Command> = this.client.registry.commands;
 
-    const help_embed: MessageEmbed = new MessageEmbed().setColor('#ff2600').setTitle('Help');
+    const helpEmbed: MessageEmbed = new MessageEmbed().setColor('#ff2600').setTitle('Help');
 
-    for (let [key, value] of groupList.entries()) {
-      //console.log(`key: ${key}, value: ${value}`);
-
+    for (const [key, value] of groupList.entries()) {
       if (!value.hidden) {
-        help_embed.addField(key, value.description, false);
+        helpEmbed.addField(key, value.description, false);
       }
     }
 
-    return await msg.embed(help_embed);
+    return msg.embed(helpEmbed);
   }
 }
