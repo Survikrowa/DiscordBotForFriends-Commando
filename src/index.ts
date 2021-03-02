@@ -1,5 +1,6 @@
-import { CommandoClient, Command } from 'discord.js-commando';
+import { CommandoClient } from 'discord.js-commando';
 import { config } from 'dotenv';
+import Distube from 'distube';
 import * as path from 'path';
 
 config();
@@ -8,13 +9,20 @@ const client = new CommandoClient({
   commandPrefix: process.env.COMMAND_PREFIX,
 });
 
-
 client.registry
   .registerDefaultTypes()
-  .registerGroups([['utility', 'utility commands']])
+  .registerGroups([
+    ['utility', 'utility commands'],
+    ['music', 'music commands'],
+  ])
   .registerCommandsIn({ filter: /^([^.].*)\.(js|ts)$/, dirname: path.join(__dirname, 'commands') });
 
-console.log(path.join(__dirname, 'commands'));
+export const distube = new Distube(client, { searchSongs: false, emitNewSongOnly: true });
+
+distube.on('error', (message, error) => {
+  message.channel.send(`Palo-bot napotkal blad: ${error}`);
+});
+
 client.on('ready', () => console.log('ready'));
 
 client.login(process.env.CLIENT_TOKEN);
@@ -24,4 +32,3 @@ client.on('message', (message) => {
     message.channel.send('pong');
   }
 });
-
