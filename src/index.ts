@@ -3,6 +3,7 @@ import { config } from 'dotenv';
 import Distube from 'distube';
 import * as path from 'path';
 import { registerActivity, ActivityType } from './activity';
+import { commandsWithoutPrefixes } from './commandsWithoutPrefixes/commands';
 
 //Firebase stuff
 import admin from 'firebase-admin';
@@ -59,7 +60,16 @@ client.on('message', (message) => {
 //
 
 client.on('message', (message) => {
-  if (message.content === 'ping') {
-    message.channel.send('pong');
-  }
+  if (message.author.bot) return;
+  const lowerCaseMessage = message.content.toLowerCase();
+  const normalizedMessage = lowerCaseMessage
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '');
+  commandsWithoutPrefixes(message).some((command) => {
+    if (normalizedMessage.includes(command.title)) {
+      command.run();
+      return false;
+    }
+  });
 });
