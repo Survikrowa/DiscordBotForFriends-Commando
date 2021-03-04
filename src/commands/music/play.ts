@@ -25,6 +25,9 @@ export default class PlayMusic extends Command {
   }
   run(msg: CommandoMessage, { musicTitle }: YoutubeArguments): Promise<Message | Message[] | null> | null {
     console.log(musicTitle);
+    try {
+      distube.skip(msg);
+    } catch (e) {}
     distube.play(msg, musicTitle);
     return msg.channel.send(`Playing ${musicTitle}`);
   }
