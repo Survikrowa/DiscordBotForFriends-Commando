@@ -17,10 +17,15 @@ client.registry
   ])
   .registerCommandsIn({ filter: /^([^.].*)\.(js|ts)$/, dirname: path.join(__dirname, 'commands') });
 
-export const distube = new Distube(client, { searchSongs: false, emitNewSongOnly: true });
+export const distube = new Distube(client, {
+  searchSongs: false,
+  emitNewSongOnly: true,
+  youtubeCookie: process.env.COOKIE,
+});
 
 distube.on('error', (message, error) => {
   message.channel.send(`Palo-bot napotkal blad: ${error}`);
+  message.channel.send(`Stack trace:\n${error.stack}`);
 });
 
 client.on('ready', () => console.log('ready'));
