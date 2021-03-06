@@ -6,7 +6,6 @@ import { registerActivity, ActivityType } from './activity';
 
 //Firebase stuff
 import admin from 'firebase-admin';
-//import firebase_token from '../firebase.json';
 
 //Loading env values
 config();
