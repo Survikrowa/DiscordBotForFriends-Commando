@@ -2,6 +2,7 @@ import { CommandoClient } from 'discord.js-commando';
 import { config } from 'dotenv';
 import Distube from 'distube';
 import * as path from 'path';
+import { registerActivity, ActivityType, firestoreUpdate, UpdateActivity } from './activity';
 
 //Firebase stuff
 import admin from 'firebase-admin';
@@ -11,7 +12,7 @@ import firebase_token from '../firebase.json';
 config();
 
 //Init Commodoro client
-const client = new CommandoClient({
+export const client = new CommandoClient({
   commandPrefix: process.env.COMMAND_PREFIX,
 });
 
@@ -42,12 +43,25 @@ distube.on('error', (message, error) => {
   message.channel.send(`Stack trace:\n${error.stack}`);
 });
 
-client.on('ready', () => console.log('ready'));
-
 client.login(process.env.CLIENT_TOKEN);
 
-client.on('message', (message) => {
-  if (message.content === 'ping') {
-    message.channel.send('pong');
-  }
-});
+//testing
+const myId = '393123191159128085';
+const myGuildId = '792497879175397456';
+
+registerActivity(ActivityType.Message, '1234', '321');
+const activityEvent = new UpdateActivity(myId, myGuildId);
+activityEvent.incrementMessages();
+activityEvent.incrementMessages();
+
+firestoreUpdate(activityEvent);
+
+// client.on('ready', () => console.log('ready'));
+
+//
+
+// client.on('message', (message) => {
+//   if (message.content === 'ping') {
+//     message.channel.send('pong');
+//   }
+// });
