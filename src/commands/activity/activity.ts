@@ -24,6 +24,7 @@ export default class DefaultHelp extends Command {
     ActivityEmbed.addField('User', activityOverview.userName, false);
     ActivityEmbed.addField('Messages send', activityOverview.sendMessages, true);
     ActivityEmbed.addField('Current level:', activityOverview.currLevel, true);
+    ActivityEmbed.addField(`Level Progress:`, `${activityOverview.levelFill * 100}%`, false);
 
     return msg.embed(ActivityEmbed);
   }
