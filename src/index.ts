@@ -2,7 +2,7 @@ import { CommandoClient } from 'discord.js-commando';
 import { config } from 'dotenv';
 import Distube from 'distube';
 import * as path from 'path';
-import { registerActivity, ActivityType } from './activity';
+import { registerActivity, ActivityType, activityFlashcard } from './activity';
 
 //Firebase stuff
 import admin from 'firebase-admin';
@@ -46,6 +46,11 @@ distube.on('error', (message, error) => {
 client.login(process.env.CLIENT_TOKEN);
 
 //testing
+(async () => {
+  const overview = await activityFlashcard('393123191159128085', '792497879175397456');
+  console.table(overview);
+})();
+
 // const myId = '393123191159128085';
 // const myGuildId = '792497879175397456';
 
