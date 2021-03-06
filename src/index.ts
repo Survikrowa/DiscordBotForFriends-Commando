@@ -2,6 +2,7 @@ import { CommandoClient } from 'discord.js-commando';
 import { config } from 'dotenv';
 import Distube from 'distube';
 import * as path from 'path';
+import { registerActivity, ActivityType } from './activity';
 
 //Firebase stuff
 import admin from 'firebase-admin';
@@ -56,6 +57,15 @@ client.login(process.env.CLIENT_TOKEN);
 // firestoreUpdate(activityEvent);
 
 client.on('ready', () => console.log('ready'));
+
+client.on('message', (message) => {
+  if (message.author.id != client.user?.id) {
+    const guildId = message.guild?.id;
+    if (guildId) {
+      registerActivity(ActivityType.Message, message.author.id, guildId);
+    }
+  }
+});
 
 //
 

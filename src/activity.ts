@@ -5,7 +5,7 @@ import logger from 'log4js';
 const log = logger.getLogger('activity');
 log.level = 'debug';
 
-export class UpdateActivity {
+class UpdateActivity {
   userId: string;
   sendMessages: number;
   guildId: string;
@@ -21,23 +21,8 @@ export class UpdateActivity {
   }
 }
 
-client.on('message', (message) => {
-  if (message.author.id != client.user?.id) {
-    const guildId = message.guild?.id;
-    if (guildId) {
-      registerActivity(ActivityType.Message, message.author.id, guildId);
-    }
-  }
-});
-
 //Where current activity will be stored until it is synced with firestore
 let activityBuffer: UpdateActivity[] = [];
-
-//Types of registered activity
-export enum ActivityType {
-  Message = 0,
-  Voice = 1,
-}
 
 //Debouncer
 let timeout: NodeJS.Timeout | null = null;
@@ -62,6 +47,13 @@ const syncActivityFirestore = () => {
   }, bouncingTimeInSeconds * 1000);
 };
 
+//Types of registered activity
+export enum ActivityType {
+  Message = 0,
+  Voice = 1,
+}
+
+//Registering Activity
 export const registerActivity = (type: ActivityType, userID: string, guildId: string): void => {
   //If the activity is voice based
   if (type === ActivityType.Voice) return;
