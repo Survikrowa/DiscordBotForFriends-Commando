@@ -6,7 +6,7 @@ import { registerActivity, ActivityType } from './activity';
 
 //Firebase stuff
 import admin from 'firebase-admin';
-import firebase_token from '../firebase.json';
+//import firebase_token from '../firebase.json';
 
 //Loading env values
 config();
@@ -35,7 +35,7 @@ export const distube = new Distube(client, {
 
 //Firebase init
 admin.initializeApp({
-  credential: admin.credential.cert(firebase_token as admin.ServiceAccount),
+  credential: admin.credential.cert(JSON.parse(process.env.FIREBASE as string)),
   storageBucket: 'gs://discordbot-44c37.appspot.com',
 });
 
