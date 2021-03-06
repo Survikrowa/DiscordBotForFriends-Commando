@@ -1,5 +1,9 @@
 import { client } from './index';
 import admin from 'firebase-admin';
+import logger from 'log4js';
+
+const log = logger.getLogger('activity');
+log.level = 'debug';
 
 export class UpdateActivity {
   userId: string;
@@ -17,8 +21,17 @@ export class UpdateActivity {
   }
 }
 
+client.on('message', (message) => {
+  if (message.author.id != client.user?.id) {
+    const guildId = message.guild?.id;
+    if (guildId) {
+      registerActivity(ActivityType.Message, message.author.id, guildId);
+    }
+  }
+});
+
 //Where current activity will be stored until it is synced with firestore
-const activityBuffer: UpdateActivity[] = [];
+let activityBuffer: UpdateActivity[] = [];
 
 //Types of registered activity
 export enum ActivityType {
@@ -26,28 +39,55 @@ export enum ActivityType {
   Voice = 1,
 }
 
+//Debouncer
+let timeout: NodeJS.Timeout | null = null;
+const bouncingTimeInSeconds = 10;
+const syncActivityFirestore = () => {
+  //Clearing timeout
+  if (timeout != null) {
+    log.debug('Debouncing');
+    clearTimeout(timeout);
+  }
+
+  //Setting the timeout function
+  timeout = setTimeout(async () => {
+    //Actual logic
+
+    log.info('Activated firebase sync');
+    for (const el of activityBuffer) {
+      await firestoreUpdate(el);
+    }
+
+    activityBuffer = [];
+  }, bouncingTimeInSeconds * 1000);
+};
+
 export const registerActivity = (type: ActivityType, userID: string, guildId: string): void => {
   //If the activity is voice based
   if (type === ActivityType.Voice) return;
 
-  //If the activity
+  //If the activity is Message
   if (type === ActivityType.Message) {
     //Filter the array for given user
+    log.debug('Registering message activity');
     const filtered = activityBuffer.filter((element: UpdateActivity) => {
       return element.userId === userID;
     });
 
+    //User reference
+    let userRef: UpdateActivity;
+
     //If not found
     if (filtered.length === 0) {
-      const userReference = new UpdateActivity(userID, guildId);
-      userReference.incrementMessages();
-      activityBuffer.push(userReference);
+      userRef = new UpdateActivity(userID, guildId);
+      userRef.incrementMessages();
+      activityBuffer.push(userRef);
     } else {
-      filtered[0].incrementMessages();
+      userRef = filtered[0];
+      userRef.incrementMessages();
     }
 
-    //Debbuging TODO
-    console.table(activityBuffer);
+    syncActivityFirestore();
   }
 };
 
@@ -64,6 +104,8 @@ export const firestoreUpdate = async (data: UpdateActivity): Promise<void> => {
   //GuildId and User id
   const guildId = data.guildId;
   const userId = data.userId;
+
+  log.debug(`Syncing activity for userID(${userId}) in guildID(${guildId}) with firestore`);
 
   //Firestore client
   const db = admin.firestore();

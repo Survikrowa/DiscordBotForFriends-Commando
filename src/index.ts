@@ -2,7 +2,6 @@ import { CommandoClient } from 'discord.js-commando';
 import { config } from 'dotenv';
 import Distube from 'distube';
 import * as path from 'path';
-import { registerActivity, ActivityType, firestoreUpdate, UpdateActivity } from './activity';
 
 //Firebase stuff
 import admin from 'firebase-admin';
@@ -46,22 +45,22 @@ distube.on('error', (message, error) => {
 client.login(process.env.CLIENT_TOKEN);
 
 //testing
-const myId = '393123191159128085';
-const myGuildId = '792497879175397456';
+// const myId = '393123191159128085';
+// const myGuildId = '792497879175397456';
 
-registerActivity(ActivityType.Message, '1234', '321');
-const activityEvent = new UpdateActivity(myId, myGuildId);
-activityEvent.incrementMessages();
-activityEvent.incrementMessages();
+// registerActivity(ActivityType.Message, '1234', '321');
+// const activityEvent = new UpdateActivity(myId, myGuildId);
+// activityEvent.incrementMessages();
+// activityEvent.incrementMessages();
 
-firestoreUpdate(activityEvent);
+// firestoreUpdate(activityEvent);
 
-// client.on('ready', () => console.log('ready'));
+client.on('ready', () => console.log('ready'));
 
 //
 
-// client.on('message', (message) => {
-//   if (message.content === 'ping') {
-//     message.channel.send('pong');
-//   }
-// });
+client.on('message', (message) => {
+  if (message.content === 'ping') {
+    message.channel.send('pong');
+  }
+});
