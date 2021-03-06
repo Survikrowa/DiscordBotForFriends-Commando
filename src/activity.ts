@@ -202,7 +202,8 @@ export const activityFlashcard = async (userId: string, guildId: string): Promis
 
   */
 
-  const levelRaw = Math.log(xp / 100) / Math.log(multiplier) + 1;
+  let levelRaw = Math.log(xp / 100) / Math.log(multiplier) + 1;
+  if (levelRaw < 0) levelRaw = 0;
   const currLevel = Math.floor(levelRaw);
 
   let currLevelXp: number;
