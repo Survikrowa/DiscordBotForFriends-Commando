@@ -38,6 +38,7 @@
     "distube": "^2.8.10",
     "dotenv": "^8.2.0",
     "ffmpeg-static": "^4.2.7",
-    "firebase-admin": "^9.5.0"
+    "firebase-admin": "^9.5.0",
+    "log4js": "^6.3.0"
   }
 }
