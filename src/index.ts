@@ -2,7 +2,7 @@ import { CommandoClient } from 'discord.js-commando';
 import { config } from 'dotenv';
 import Distube from 'distube';
 import * as path from 'path';
-import { registerActivity, ActivityType, activityFlashcard } from './activity';
+import { registerActivity, ActivityType } from './activity';
 
 //Firebase stuff
 import admin from 'firebase-admin';
@@ -22,6 +22,7 @@ client.registry
   .registerGroups([
     ['utility', 'utility commands'],
     ['music', 'music commands'],
+    ['activity', 'activity commands'],
   ])
   .registerCommandsIn({ filter: /^([^.].*)\.(js|ts)$/, dirname: path.join(__dirname, 'commands') });
 
@@ -44,22 +45,6 @@ distube.on('error', (message, error) => {
 });
 
 client.login(process.env.CLIENT_TOKEN);
-
-//testing
-(async () => {
-  const overview = await activityFlashcard('393123191159128085', '792497879175397456');
-  console.table(overview);
-})();
-
-// const myId = '393123191159128085';
-// const myGuildId = '792497879175397456';
-
-// registerActivity(ActivityType.Message, '1234', '321');
-// const activityEvent = new UpdateActivity(myId, myGuildId);
-// activityEvent.incrementMessages();
-// activityEvent.incrementMessages();
-
-// firestoreUpdate(activityEvent);
 
 client.on('ready', () => console.log('ready'));
 
