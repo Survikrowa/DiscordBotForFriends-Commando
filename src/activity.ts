@@ -216,15 +216,15 @@ export const activityFlashcard = async (userId: string, guildId: string): Promis
 
   const levelFill = Math.round(((xp - currLevelXp) / (nextLevelXp - currLevelXp)) * 100) / 100;
 
-  const returnVal: ActivityOverview = {
-    userName: userName,
-    userId: userId,
-    sendMessages: sendMessages,
-    xp: xp,
-    currLevel: currLevel,
-    levelFill: levelFill,
+  const userProfileInfo: ActivityOverview = {
+    userName,
+    userId,
+    sendMessages,
+    xp,
+    currLevel,
+    levelFill,
     nextLevelXp: Math.round(nextLevelXp),
   };
 
-  return returnVal;
+  return userProfileInfo;
 };
