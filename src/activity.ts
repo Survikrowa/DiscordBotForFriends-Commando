@@ -1,5 +1,5 @@
 import { client } from './index';
-import admin from 'firebase-admin';
+import { admin } from './firebase';
 import logger from 'log4js';
 
 const log = logger.getLogger('activity');
@@ -93,9 +93,7 @@ interface FirestoreActivity {
 const eventsToXP = { message: 10 };
 
 const firestoreUpdate = async (data: UpdateActivity): Promise<void> => {
-  //GuildId and User id
-  const guildId = data.guildId;
-  const userId = data.userId;
+  const { guildId, userId } = data;
 
   log.debug(`Syncing activity for userID(${userId}) in guildID(${guildId}) with firestore`);
 
@@ -121,12 +119,12 @@ const firestoreUpdate = async (data: UpdateActivity): Promise<void> => {
   if (userQuery.empty) {
     //If the record was not found
     //Getting discord user name
-    const userName = await (await client.users.fetch(`${userId}`)).username;
+    const userName = (await client.users.fetch(`${userId}`)).username;
 
     //Old data that will be added to current local activity
     oldRecord = {
-      userName: userName,
-      userId: userId,
+      userName,
+      userId,
       sendMessages: 0,
       xp: 0,
     };
@@ -169,10 +167,10 @@ export const activityFlashcard = async (userId: string, guildId: string): Promis
   const userQuery = await activityCollectionReference.where('userId', '==', userId).get();
 
   if (userQuery.empty) {
-    const userName = await (await client.users.fetch(`${userId}`)).username;
+    const userName = (await client.users.fetch(`${userId}`)).username;
     const returnVal: ActivityOverview = {
-      userName: userName,
-      userId: userId,
+      userName,
+      userId,
       sendMessages: 0,
       xp: 0,
       currLevel: 0,
