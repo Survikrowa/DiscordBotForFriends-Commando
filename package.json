@@ -7,7 +7,7 @@
     "dev": "ts-node-dev src/index.ts",
     "lint": "eslint src/**/*.ts",
     "format": "eslint src/**/*.ts --fix",
-    "build": "tsc && ls -la dist",
+    "build": "tsc",
     "start": "node dist/src/index.js",
     "prepare": "husky install"
   },
