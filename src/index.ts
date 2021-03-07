@@ -5,9 +5,6 @@ import * as path from 'path';
 import { registerActivity, ActivityType } from './activity';
 import { commandsWithoutPrefixes } from './commandsWithoutPrefixes/commands';
 
-//Firebase stuff
-import admin from 'firebase-admin';
-
 //Loading env values
 config();
 
@@ -31,12 +28,6 @@ export const distube = new Distube(client, {
   searchSongs: false,
   emitNewSongOnly: true,
   youtubeCookie: process.env.COOKIE,
-});
-
-//Firebase init
-admin.initializeApp({
-  credential: admin.credential.cert(JSON.parse(process.env.FIREBASE as string)),
-  storageBucket: 'gs://discordbot-44c37.appspot.com',
 });
 
 distube.on('error', (message, error) => {
