@@ -3,9 +3,7 @@ import { config } from 'dotenv';
 import Distube from 'distube';
 import * as path from 'path';
 import { registerActivity, ActivityType } from './activity';
-
-//Firebase stuff
-import admin from 'firebase-admin';
+import { commandsWithoutPrefixes } from './commandsWithoutPrefixes/commands';
 
 //Loading env values
 config();
@@ -32,12 +30,6 @@ export const distube = new Distube(client, {
   youtubeCookie: process.env.COOKIE,
 });
 
-//Firebase init
-admin.initializeApp({
-  credential: admin.credential.cert(JSON.parse(process.env.FIREBASE as string)),
-  storageBucket: 'gs://discordbot-44c37.appspot.com',
-});
-
 distube.on('error', (message, error) => {
   message.channel.send(`Palo-bot napotkal blad: ${error}`);
   message.channel.send(`Stack trace:\n${error.stack}`);
@@ -59,7 +51,16 @@ client.on('message', (message) => {
 //
 
 client.on('message', (message) => {
-  if (message.content === 'ping') {
-    message.channel.send('pong');
-  }
+  if (message.author.bot) return;
+  const lowerCaseMessage = message.content.toLowerCase();
+  const normalizedMessage = lowerCaseMessage
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '');
+  commandsWithoutPrefixes(message).some((command) => {
+    if (normalizedMessage.includes(command.title)) {
+      command.run();
+      return false;
+    }
+  });
 });
