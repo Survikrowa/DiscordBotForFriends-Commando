@@ -38,6 +38,19 @@ admin.initializeApp({
   storageBucket: 'gs://discordbot-44c37.appspot.com',
 });
 
+const testing = async () => {
+  const bucket = admin.storage().bucket();
+  const filesArray = await bucket.getFiles();
+  const image = (await filesArray[0][1].download())[0];
+
+  client.on('message', (message) => {
+    if (message.content === 'pog') {
+      message.channel.send('Pog', { files: [image] });
+    }
+  });
+};
+testing();
+
 distube.on('error', (message, error) => {
   message.channel.send(`Palo-bot napotkal blad: ${error}`);
   message.channel.send(`Stack trace:\n${error.stack}`);
