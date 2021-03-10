@@ -4,6 +4,7 @@ import { animeCommand } from './commands/anime';
 import { gTwoCommand } from './commands/g2';
 import { lolCommand } from './commands/lol';
 import { pogCommand } from './commands/pog';
+import { winCommand } from './commands/win';
 
 export const commandsWithoutPrefixes: CommandsWithoutPrefixes = (message) => [
   boopCommand(message),
@@ -11,4 +12,5 @@ export const commandsWithoutPrefixes: CommandsWithoutPrefixes = (message) => [
   gTwoCommand(message),
   lolCommand(message),
   pogCommand(message),
+  winCommand(message),
 ];
